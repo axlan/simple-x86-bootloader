@@ -103,11 +103,12 @@ $(ELF_KMULTIBOOT):
 	$(OBJCOPY) --remove-section=.comment --remove-section=.note -O binary $< $@
 	@echo `du -h $@`
 
+$(IMG): LOOP = $(shell sudo $(TOOLS_DIR)/getnextloop.sh)
 $(IMG): all
-	sudo $(TOOLS_DIR)/partitioning.sh /dev/loop0 -o $@ $(BIN_STAGE0) $(BIN_STAGE1)
-	sudo $(TOOLS_DIR)/formatting.sh /dev/loop0 $@
-	sudo $(TOOLS_DIR)/fcopytofs.sh /dev/loop0 $@ $(KMULTIBOOT_ROOT_FS_DIR)
-	sudo chown matt:matt $@
+	sudo $(TOOLS_DIR)/partitioning.sh $(LOOP) -o $@ $(BIN_STAGE0) $(BIN_STAGE1)
+	sudo $(TOOLS_DIR)/formatting.sh $(LOOP) $@
+	sudo $(TOOLS_DIR)/fcopytofs.sh $(LOOP) $@ $(KMULTIBOOT_ROOT_FS_DIR)
+	sudo chown $(USER):$(USER) $@
 
 
 ##############

@@ -134,8 +134,14 @@ if [ $? -ne 0 ]; then
     losetup ${loopback_device} ${disk_image}
 fi
 
+sudo partx -v --add ${loopback_device}
+
 format_FAT_partitions
 format_MinixV1_partitions
+
+sync
+
+sudo partx -v --delete ${loopback_device}
 
 losetup -d ${loopback_device}
 

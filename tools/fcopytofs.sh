@@ -126,16 +126,20 @@ mkdir -p ${mount_point}
 # mount the FAT partition and copy files
 ########################################
 losetup ${loopback_device} ${disk_image}
+sudo partx -v --add ${loopback_device}
 
 echo "Mount partition ${device_partition} (begin=${device_partition_sector_start}, end=${device_partition_sector_end}), size=${device_partition_size} bytes"
 mount -t vfat ${device_partition} ${mount_point}
 echo "Copy files to ${device_partition}"
 cp ${fs_root_path}/* ${mount_point}
 ls ${mount_point}
+
+sleep 1
 sync
 umount ${mount_point}
 echo "Unmount partition ${device_partition}"
 
+sudo partx -v --delete ${loopback_device}
 losetup -d ${loopback_device}
 
 exit 0

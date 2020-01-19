@@ -190,6 +190,8 @@ ${fdisk_cmd_print_partition_table}
 ${fdisk_cmd_write_table_and_exit}
 EOF
 
+sync
+
 losetup -d ${loopback_device}
 
 exit 0
